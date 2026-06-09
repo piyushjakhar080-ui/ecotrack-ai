@@ -18,7 +18,9 @@ const appState = {
   // Selection of checked eco checklist actions
   checkedActions: new Set(),
   // Historical entries saved locally
-  history: []
+  history: [],
+  // Monthly carbon goal in kg CO2 (with default of 300)
+  goal: 300
 };
 
 // 2. Carbon Footprint Coefficients & Constants
@@ -88,11 +90,20 @@ const DOM = {
   // History panel
   logForm: document.getElementById("logForm"),
   logNameInput: document.getElementById("logName"),
-  historyContainer: document.getElementById("historyContainer")
+  historyContainer: document.getElementById("historyContainer"),
+  // New Monthly Carbon Goal Tracker DOM elements
+  goalInput: document.getElementById("goalInput"),
+  goalCurrentNet: document.getElementById("goalCurrentNet"),
+  goalDisplayVal: document.getElementById("goalDisplayVal"),
+  goalProgressPctBadged: document.getElementById("goalProgressPctBadged"),
+  goalStatusFeedback: document.getElementById("goalStatusFeedback"),
+  goalProgressPct: document.getElementById("goalProgressPct"),
+  goalProgressBar: document.getElementById("goalProgressBar")
 };
 
 // 4. Initialize Application
 window.addEventListener("DOMContentLoaded", () => {
+  loadGoalFromStorage();
   loadHistoryFromStorage();
   bindInputEvents();
   renderEcoActions();
@@ -168,6 +179,28 @@ function bindInputEvents() {
       appState.inputs.wasteLevel = card.getAttribute("data-waste");
       recalculateAll();
     });
+  });
+
+  // Goal Input listener (Updates dynamically)
+  DOM.goalInput.addEventListener("input", (e) => {
+    let val = parseFloat(e.target.value);
+    if (isNaN(val) || val < 1) {
+      val = 1; // Safeguard so calculation is not dividing by zero or NaN
+    }
+    appState.goal = val;
+    saveGoalToStorage(val);
+    recalculateAll();
+  });
+
+  DOM.goalInput.addEventListener("change", (e) => {
+    let val = parseFloat(e.target.value);
+    if (isNaN(val) || val < 1) {
+      val = 300; // Reset to safe value on invalid entry exit
+      DOM.goalInput.value = val;
+    }
+    appState.goal = val;
+    saveGoalToStorage(val);
+    recalculateAll();
   });
 
   // Save history form
@@ -288,6 +321,9 @@ function updateDashboardGrid(gross, net, offsets, categories) {
   // Draw Charts
   drawSVGDonut(categories);
   renderDynamicRecommendations(categories);
+  
+  // Update Goal Tracker Progress Details
+  updateGoalTracker(net);
 }
 
 // 8. Render Smart Dynamic Recommendations - Ordered by Highest Source
@@ -799,4 +835,90 @@ function deleteHistoricConfig(itemId) {
   appState.history = appState.history.filter(item => item.id !== itemId);
   saveToStorageKey();
   renderHistoryLogs();
+}
+
+// 12. Monthly Carbon Goal Tracker Utilities (LocalStorage & UI)
+function loadGoalFromStorage() {
+  try {
+    const savedGoal = localStorage.getItem("ecotrack_goal");
+    if (savedGoal !== null) {
+      const parsedGoal = parseFloat(savedGoal);
+      if (!isNaN(parsedGoal) && parsedGoal >= 1) {
+        appState.goal = parsedGoal;
+      } else {
+        appState.goal = 300;
+      }
+    } else {
+      appState.goal = 300;
+    }
+    // Reflect goal in HTML inputs
+    if (DOM.goalInput) {
+      DOM.goalInput.value = appState.goal;
+    }
+  } catch (error) {
+    console.error("Local storage goal lookup failed:", error);
+    appState.goal = 300;
+  }
+}
+
+function saveGoalToStorage(goalVal) {
+  try {
+    localStorage.setItem("ecotrack_goal", goalVal);
+  } catch (error) {
+    console.error("Local storage goal save failed:", error);
+  }
+}
+
+function updateGoalTracker(netEmissions) {
+  // Ensure we have correct cache objects
+  if (!DOM.goalCurrentNet || !DOM.goalDisplayVal || !DOM.goalProgressPct || !DOM.goalProgressBar || !DOM.goalProgressPctBadged || !DOM.goalStatusFeedback) {
+    return;
+  }
+
+  const goal = appState.goal || 300;
+  
+  // Progress formula percentage: (Current Net Footprint / Goal) * 100
+  let progressPct = 0;
+  if (goal > 0) {
+    progressPct = parseFloat(((netEmissions / goal) * 100).toFixed(1));
+  } else {
+    progressPct = 0;
+  }
+
+  // Bind values to UI metrics
+  DOM.goalCurrentNet.innerText = Math.round(netEmissions);
+  DOM.goalDisplayVal.innerText = Math.round(goal);
+  DOM.goalProgressPct.innerText = progressPct + "%";
+  
+  // Adjust progress bar percentage width (clamping to 100 max visually, but displaying real count)
+  const barPercent = Math.min(100, Math.max(0, progressPct));
+  DOM.goalProgressBar.style.width = barPercent + "%";
+
+  // Class selection rules:
+  // - Green if below goal (progressPct <= 100)
+  // - Yellow if within 20% above goal (101% to 120%)
+  // - Red if significantly above goal (> 120%)
+  let badgeColorClass = "";
+  let barColorClass = "";
+  let statusText = "";
+
+  if (progressPct <= 100) {
+    badgeColorClass = "bg-emerald-100 text-emerald-800";
+    barColorClass = "bg-emerald-600";
+    statusText = `Excellent! Your net emissions are ${Math.round(100 - progressPct)}% below your monthly target.`;
+  } else if (progressPct <= 120) {
+    badgeColorClass = "bg-amber-100 text-amber-800";
+    barColorClass = "bg-amber-500";
+    statusText = `Warning: You are ${Math.round(progressPct - 100)}% above your target. Try selecting sustainable option offsets!`;
+  } else {
+    badgeColorClass = "bg-rose-100 text-rose-800";
+    barColorClass = "bg-rose-600";
+    statusText = `Alert: Significantly above your ceiling target by ${Math.round(progressPct - 100)}%! Avoid driving and switch diet types.`;
+  }
+
+  DOM.goalProgressPctBadged.className = `text-xs font-semibold font-mono px-2 py-0.5 rounded-full inline-block mt-0.5 ${badgeColorClass}`;
+  DOM.goalProgressPctBadged.innerText = progressPct + "%";
+  
+  DOM.goalProgressBar.className = `h-full rounded-full transition-all duration-500 ease-out ${barColorClass}`;
+  DOM.goalStatusFeedback.innerText = statusText;
 }
