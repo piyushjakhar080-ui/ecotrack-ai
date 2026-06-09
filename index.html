@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EcoTrack AI — Interactive Carbon Footprint Calculator & Dashboard</title>
+    <!-- Import live Tailwind CSS compiled engine from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+              mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+            }
+          }
+        }
+      }
+    </script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="bg-[#fbfcfa] text-stone-900 selection:bg-emerald-100 selection:text-emerald-950">
+
+    <!-- Top Navigation Header -->
+    <header class="border-b border-stone-200/60 bg-white/85 backdrop-blur-md sticky top-0 z-40">
+      <div class="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white shadow-md shadow-emerald-500/10">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18m9-9H3" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c4.97 0 9 4.03 9 9s-4.03 9-9 9-9-4.03-9-9 4.03-9 9-9Z" />
+            </svg>
+          </div>
+          <div>
+            <span class="font-extrabold text-stone-950 tracking-tight text-lg">EcoTrack <span class="text-emerald-600">AI</span></span>
+            <span class="block text-[9px] text-stone-400 font-bold uppercase tracking-widest -mt-1">Sustainability Portal</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="#calculator-section" class="text-xs font-semibold text-stone-600 hover:text-emerald-700 bg-stone-100 px-3 py-1.5 rounded-xl transition-all">Start Simulator</a>
+          <span class="text-xs text-stone-400 font-mono hidden sm:inline">V2.4 Live</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Banner Greeting -->
+    <section class="max-w-7xl mx-auto px-4 md:px-6 pt-10 pb-6">
+      <div class="p-8 md:p-12 bg-gradient-to-br from-emerald-800 to-teal-950 text-white rounded-3xl relative overflow-hidden shadow-xl shadow-emerald-950/5">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.12),transparent_45%)]"></div>
+        <div class="relative z-10 max-w-2xl">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500/15 border border-emerald-400/20 rounded-full text-emerald-300 text-xs font-semibold mb-6">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Awareness Platform
+          </div>
+          <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-3">Measure, Understand, and Optimize Your Daily Carbon Footprint.</h1>
+          <p class="text-sm md:text-base text-emerald-100/90 leading-relaxed font-light mb-6">
+            EcoTrack AI provides an interactive playground for exploring emission factors. Adjust your travel, electricity, diet, and waste parameters to dynamically visualize environmental metrics and receive personalized reduction steps instantly.
+          </p>
+          <div class="flex flex-wrap gap-4 text-xs font-semibold">
+            <div class="flex items-center gap-2 bg-emerald-900/40 px-3 py-1.5 rounded-xl border border-emerald-700/30">
+              <i data-lucide="calculator" class="w-4 h-4 text-emerald-400"></i>
+              Real-time Simulation
+            </div>
+            <div class="flex items-center gap-2 bg-emerald-900/40 px-3 py-1.5 rounded-xl border border-emerald-700/30">
+              <i data-lucide="check-square" class="w-4 h-4 text-emerald-400"></i>
+              Active Offset Tracker
+            </div>
+            <div class="flex items-center gap-2 bg-emerald-900/40 px-3 py-1.5 rounded-xl border border-emerald-700/30">
+              <i data-lucide="history" class="w-4 h-4 text-emerald-400"></i>
+              LocalStorage Persistence
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Application Bento Grid -->
+    <main id="calculator-section" class="max-w-7xl mx-auto px-4 md:px-6 py-6 scroll-mt-20">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left Column: Inputs Panel (Col span: 5) -->
+        <section class="lg:col-span-5 space-y-6">
+          <div class="flex items-center justify-between border-b border-stone-200 pb-3">
+            <h2 class="text-lg font-extrabold tracking-tight text-stone-900 flex items-center gap-2">
+              <i data-lucide="sliders" class="w-5 h-5 text-emerald-600"></i>
+              Footprint Inputs
+            </h2>
+            <span class="text-xs font-mono text-stone-400 uppercase font-bold">Simulator Controls</span>
+          </div>
+
+          <!-- Transportation Card -->
+          <div class="p-6 bg-white border border-stone-200/80 rounded-2xl shadow-sm space-y-4">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <div class="p-1.5 bg-emerald-50 text-emerald-700 rounded-lg">
+                  <i data-lucide="car" class="w-4.5 h-4.5"></i>
+                </div>
+                <h3 class="font-bold text-stone-900 text-sm md:text-base">1. Commute & Travel</h3>
+              </div>
+              <span class="text-xs text-stone-400 font-mono">Daily Target</span>
+            </div>
+
+            <!-- Distance Slider -->
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs font-medium text-stone-500">
+                <label for="travelSlider">Est. Daily Travel Distance</label>
+                <span class="text-stone-900 font-mono font-bold"><span id="travelValue">25</span> km/day</span>
+              </div>
+              <input type="range" id="travelSlider" min="0" max="200" value="25" class="w-full" />
+              <div class="flex justify-between text-[10px] text-stone-400 font-mono">
+                <span>0 km (WFH)</span>
+                <span>100 km</span>
+                <span>200 km (Commuter)</span>
+              </div>
+            </div>
+
+            <!-- Transport Selection Grid -->
+            <div class="space-y-2 pt-2">
+              <label class="block text-xs font-semibold text-stone-500">Commute Mechanism</label>
+              <div class="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-5 gap-2">
+                <!-- Car -->
+                <button type="button" data-transport="car" class="ring-2 ring-emerald-600 bg-emerald-50/50 border-emerald-200 p-2 border rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all text-center group cursor-pointer">
+                  <i data-lucide="car" class="w-5 h-5 text-stone-500 group-hover:text-emerald-700 transition-colors"></i>
+                  <span class="text-[10px] font-bold text-stone-700">Car</span>
+                  <span class="text-[8px] font-mono text-stone-400 block -mt-1 leading-none">0.18 kg/km</span>
+                </button>
+                <!-- Bus -->
+                <button type="button" data-transport="bus" class="border-stone-200 p-2 border rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all text-center group cursor-pointer hover:border-emerald-300">
+                  <i data-lucide="bus" class="w-5 h-5 text-stone-500 group-hover:text-emerald-700 transition-colors"></i>
+                  <span class="text-[10px] font-bold text-stone-700">Bus</span>
+                  <span class="text-[8px] font-mono text-stone-400 block -mt-1 leading-none">0.08 kg/km</span>
+                </button>
+                <!-- Train -->
+                <button type="button" data-transport="train" class="border-stone-200 p-2 border rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all text-center group cursor-pointer hover:border-emerald-300">
+                  <i data-lucide="train" class="w-5 h-5 text-stone-500 group-hover:text-emerald-700 transition-colors"></i>
+                  <span class="text-[10px] font-bold text-stone-700">Train</span>
+                  <span class="text-[8px] font-mono text-stone-400 block -mt-1 leading-none">0.04 kg/km</span>
+                </button>
+                <!-- Bike -->
+                <button type="button" data-transport="bike" class="border-stone-200 p-2 border rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all text-center group cursor-pointer hover:border-emerald-300">
+                  <i data-lucide="bike" class="w-5 h-5 text-stone-500 group-hover:text-emerald-700 transition-colors"></i>
+                  <span class="text-[10px] font-bold text-stone-700">Bicycle</span>
+                  <span class="text-[8px] font-mono text-emerald-600 block -mt-1 leading-none">0.00 kg/km</span>
+                </button>
+                <!-- Walking -->
+                <button type="button" data-transport="walking" class="border-stone-200 p-2 border rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all text-center group cursor-pointer hover:border-emerald-300">
+                  <i data-lucide="footprints" class="w-5 h-5 text-stone-500 group-hover:text-emerald-700 transition-colors"></i>
+                  <span class="text-[10px] font-bold text-stone-700">Walking</span>
+                  <span class="text-[8px] font-mono text-emerald-600 block -mt-1 leading-none">0.00 kg/km</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Home Energy Usage Card -->
+          <div class="p-6 bg-white border border-stone-200/80 rounded-2xl shadow-sm space-y-4">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <div class="p-1.5 bg-emerald-50 text-emerald-700 rounded-lg">
+                  <i data-lucide="zap" class="w-4.5 h-4.5"></i>
+                </div>
+                <h3 class="font-bold text-stone-900 text-sm md:text-base">2. Home Electricity</h3>
+              </div>
+              <span class="text-xs text-stone-400 font-mono">Monthly Power</span>
+            </div>
+
+            <!-- Electricity usage Slider -->
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs font-medium text-stone-500">
+                <label for="electricitySlider">Monthly Electricity Consumed</label>
+                <span class="text-stone-900 font-mono font-bold"><span id="electricityValue">280</span> kWh/month</span>
+              </div>
+              <input type="range" id="electricitySlider" min="0" max="1000" value="280" class="w-full" />
+              <div class="flex justify-between text-[10px] text-stone-400 font-mono">
+                <span>0 kWh (Off-grid)</span>
+                <span>500 kWh (Avg home)</span>
+                <span>1000 kWh (Large family)</span>
+              </div>
+            </div>
+
+            <!-- Solar Offset Slider -->
+            <div class="space-y-2 pt-2 border-t border-stone-100">
+              <div class="flex justify-between text-xs font-medium text-stone-500">
+                <label for="solarSlider" class="flex items-center gap-1">Solar / Clean Offset Share</label>
+                <span class="text-emerald-600 font-mono font-bold"><span id="solarValue">0</span>% Solar</span>
+              </div>
+              <input type="range" id="solarSlider" min="0" max="100" value="0" class="w-full" />
+              <p class="text-[11px] text-stone-400 leading-normal">
+                Reduces grid electricity dependency from local coal/gas generators. Higher clean offset directly lowers electricity category footprints.
+              </p>
+            </div>
+          </div>
+
+          <!-- Nutrition & Diet Card -->
+          <div class="p-6 bg-white border border-stone-200/80 rounded-2xl shadow-sm space-y-4">
+            <div class="flex items-center gap-2">
+              <div class="p-1.5 bg-emerald-50 text-emerald-700 rounded-lg">
+                <i data-lucide="utensils" class="w-4.5 h-4.5"></i>
+              </div>
+              <h3 class="font-bold text-stone-900 text-sm md:text-base">3. Nutrition & Diet</h3>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <!-- Mixed Diet -->
+              <button type="button" data-diet="mixed" class="ring-2 ring-emerald-600 bg-emerald-50/50 border-emerald-200 p-3.5 border rounded-xl flex flex-col items-start gap-1 cursor-pointer transition-all text-left hover:border-emerald-300">
+                <div class="flex items-center justify-between w-full">
+                  <span class="text-xs font-bold text-stone-900">Standard Mixed</span>
+                  <i data-lucide="utensils" class="w-4 h-4 text-rose-500"></i>
+                </div>
+                <span class="text-[10px] text-stone-400 font-medium">Regular Meat/Poultry</span>
+                <span class="inline-flex text-[9px] font-mono px-1.5 py-0.5 rounded-full bg-stone-100 text-stone-600 font-bold mt-1.5">~215 kg CO₂/mo</span>
+              </button>
+
+              <!-- Vegetarian -->
+              <button type="button" data-diet="vegetarian" class="border-stone-200 p-3.5 border rounded-xl flex flex-col items-start gap-1 cursor-pointer transition-all text-left hover:border-emerald-300">
+                <div class="flex items-center justify-between w-full">
+                  <span class="text-xs font-bold text-stone-900">Vegetarian</span>
+                  <i data-lucide="leaf" class="w-4 h-4 text-emerald-500"></i>
+                </div>
+                <span class="text-[10px] text-stone-400 font-medium">Eggs/Dairy, no meat</span>
+                <span class="inline-flex text-[9px] font-mono px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold mt-1.5">~105 kg CO₂/mo</span>
+              </button>
+
+              <!-- Vegan -->
+              <button type="button" data-diet="vegan" class="border-stone-200 p-3.5 border rounded-xl flex flex-col items-start gap-1 cursor-pointer transition-all text-left hover:border-emerald-300">
+                <div class="flex items-center justify-between w-full">
+                  <span class="text-xs font-bold text-stone-900">100% Vegan</span>
+                  <i data-lucide="sprout" class="w-4 h-4 text-emerald-600 animate-pulse"></i>
+                </div>
+                <span class="text-[10px] text-stone-400 font-medium font-sans">Strict plant proteins</span>
+                <span class="inline-flex text-[9px] font-mono px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold mt-1.5">~60 kg CO₂/mo</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Consumption & Waste Card -->
+          <div class="p-6 bg-white border border-stone-200/80 rounded-2xl shadow-sm space-y-4">
+            <div class="flex items-center gap-2">
+              <div class="p-1.5 bg-emerald-50 text-emerald-700 rounded-lg">
+                <i data-lucide="trash-2" class="w-4.5 h-4.5"></i>
+              </div>
+              <h3 class="font-bold text-stone-900 text-sm md:text-base">4. Consumer Waste</h3>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <!-- Low Waste -->
+              <button type="button" data-waste="low" class="border-stone-200 p-3.5 border rounded-xl flex flex-col items-start gap-1 cursor-pointer transition-all text-left hover:border-emerald-300">
+                <span class="text-xs font-bold text-stone-900">Low Volume</span>
+                <span class="text-[10px] text-stone-400 font-medium">Active nesting composting & recycling</span>
+                <span class="inline-flex text-[9px] font-mono px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold mt-2">~15 kg CO₂/mo</span>
+              </button>
+
+              <!-- Medium Waste -->
+              <button type="button" data-waste="medium" class="ring-2 ring-emerald-600 bg-emerald-50/50 border-emerald-200 p-3.5 border rounded-xl flex flex-col items-start gap-1 cursor-pointer transition-all text-left hover:border-emerald-300">
+                <span class="text-xs font-bold text-stone-900">Moderate Volume</span>
+                <span class="text-[10px] text-stone-400 font-medium">Standard packaging trash behavior</span>
+                <span class="inline-flex text-[9px] font-mono px-1.5 py-0.5 rounded-full bg-stone-100 text-stone-600 font-bold mt-2">~35 kg CO₂/mo</span>
+              </button>
+
+              <!-- High Waste -->
+              <button type="button" data-waste="high" class="border-stone-200 p-3.5 border rounded-xl flex flex-col items-start gap-1 cursor-pointer transition-all text-left hover:border-emerald-300">
+                <span class="text-xs font-bold text-rose-900 bg-rose-50 px-1 py-0.2 rounded-md">High Volume</span>
+                <span class="text-[10px] text-stone-400 font-medium">Double-wrapped packages, no recycling</span>
+                <span class="inline-flex text-[9px] font-mono px-1.5 py-0.5 rounded-full bg-rose-50 text-rose-700 font-bold mt-2">~65 kg CO₂/mo</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right Column: Dashboard & Outputs Panel (Col span: 7) -->
+        <section class="lg:col-span-7 space-y-6">
+          <div class="flex items-center justify-between border-b border-stone-200 pb-3">
+            <h2 class="text-lg font-extrabold tracking-tight text-stone-900 flex items-center gap-2">
+              <i data-lucide="layout-dashboard" class="w-5 h-5 text-emerald-600"></i>
+              Footprint Dashboard
+            </h2>
+            <span class="text-xs font-mono text-emerald-600 uppercase font-bold">Real-Time Core Analysis</span>
+          </div>
+
+          <!-- Score Card and Net emissions tracker -->
+          <div id="scoreCardContainer" class="p-6 bg-white border border-stone-200/80 rounded-2xl transition-all duration-300 green-glow">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+              <div>
+                <span class="text-xs font-bold text-stone-400 uppercase tracking-widest block mb-1">Environmental score</span>
+                <div class="flex items-baseline gap-2 mb-3">
+                  <div class="text-4xl md:text-5xl font-extrabold text-stone-950 tracking-tight font-mono" id="netEmissions">180</div>
+                  <span class="text-sm font-semibold text-stone-500">kg CO₂ / mo</span>
+                </div>
+                <div class="mb-2">
+                  <span id="scoreBadge" class="inline-flex text-xs font-semibold tracking-wide uppercase px-3.5 py-1 rounded-full bg-emerald-600 text-white">Green Balance (Low)</span>
+                </div>
+                <p id="scoreBadgeDesc" class="text-xs text-stone-500 leading-relaxed font-normal">
+                  Excellent sustainability rating. Your footprint is fully aligned with Paris Climate agreement standards!
+                </p>
+              </div>
+
+              <!-- Compact Gross emissions vs Offsets table -->
+              <div class="bg-stone-50/80 border border-stone-200/40 p-4 rounded-xl space-y-3">
+                <div class="flex justify-between items-center text-xs pb-2 border-b border-stone-200/60">
+                  <span class="text-stone-500 font-medium">Gross Footprint</span>
+                  <span class="font-mono text-stone-900 font-bold"><span id="totalEmissions">210</span> kg CO₂</span>
+                </div>
+                <div class="flex justify-between items-center text-xs pb-2 border-b border-stone-200/60">
+                  <span class="text-stone-500 font-medium">Offsite Goals Applied</span>
+                  <span class="font-mono text-emerald-600 font-bold">Adjusted Local Set</span>
+                </div>
+                <div class="flex justify-between items-center text-xs">
+                  <span class="text-stone-500 font-medium" id="netEmissionsLabel">Net Monthly Footprint</span>
+                  <span class="font-mono text-stone-900 font-bold"><span id="categoriesSum">100% Base</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic SVG Category Breakdown & Interactive Chart Progress -->
+          <div class="p-6 bg-white border border-stone-200/80 rounded-2xl shadow-sm space-y-6">
+            <h3 class="font-bold text-stone-900 text-sm md:text-base flex items-center justify-between">
+              <span>Dynamic Category Breakdown</span>
+              <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-stone-100 text-stone-500 font-bold">Interactive Segments</span>
+            </h3>
+
+            <!-- Chart Core -->
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
+              
+              <!-- SVG Donut Chart (Left, Span 5) -->
+              <div class="sm:col-span-5 flex justify-center relative">
+                <svg width="140" height="140" viewBox="0 0 140 140" class="w-32 h-32 md:w-36 md:h-36">
+                  <circle cx="70" cy="70" r="50" fill="none" stroke="#f4f4f5" stroke-width="16" />
+                  <g id="svgDonut">
+                    <!-- Slices are generated on-the-fly dynamically via JS -->
+                  </g>
+                </svg>
+              </div>
+
+              <!-- Progress Bars Details (Right, Span 7) -->
+              <div class="sm:col-span-7 space-y-4" id="donutLegend">
+                <!-- Legends list injected dynamically via script -->
+              </div>
+            </div>
+
+            <!-- Numeric category outputs -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-stone-50 p-4 rounded-xl border border-stone-100">
+              <div class="text-center">
+                <span class="text-[10px] text-stone-400 uppercase font-bold tracking-wider block">1. Transport</span>
+                <span class="text-sm font-mono font-bold text-stone-700"><span id="valTransport">0</span> kg</span>
+              </div>
+              <div class="text-center border-l border-stone-200/40">
+                <span class="text-[10px] text-stone-400 uppercase font-bold tracking-wider block">2. Energy</span>
+                <span class="text-sm font-mono font-bold text-stone-700"><span id="valEnergy">0</span> kg</span>
+              </div>
+              <div class="text-center border-l border-stone-200/40">
+                <span class="text-[10px] text-stone-400 uppercase font-bold tracking-wider block">3. Diet</span>
+                <span class="text-sm font-mono font-bold text-stone-700"><span id="valDiet">0</span> kg</span>
+              </div>
+              <div class="text-center border-l border-stone-200/40">
+                <span class="text-[10px] text-stone-400 uppercase font-bold tracking-wider block">4. Waste</span>
+                <span class="text-sm font-mono font-bold text-stone-700"><span id="valWaste">0</span> kg</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Real World Climate Equivalencies Panel -->
+          <div class="p-6 bg-white border border-stone-200/80 rounded-2xl shadow-sm space-y-4">
+            <h3 class="font-bold text-stone-900 text-sm md:text-base flex items-center gap-2">
+              <i data-lucide="globe" class="w-4.5 h-4.5 text-emerald-600"></i>
+              Real-World Climate Equivalencies
+            </h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <!-- Tree Absorb card -->
+              <div class="p-4 bg-emerald-50/50 border border-emerald-100/60 rounded-xl space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold uppercase text-emerald-800 tracking-wider">Forestry Impact</span>
+                  <i data-lucide="tree-pine" class="w-4 h-4 text-emerald-600"></i>
+                </div>
+                <div class="font-mono text-2xl font-extrabold text-stone-950"><span id="equivTrees">0</span></div>
+                <p class="text-[10px] text-stone-500 leading-tight">Forest trees needed for active absorption for 1 full year.</p>
+              </div>
+
+              <!-- Car Driving fuel card -->
+              <div class="p-4 bg-amber-50/30 border border-amber-100/40 rounded-xl space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold uppercase text-amber-800 tracking-wider">Gasoline Driving</span>
+                  <i data-lucide="route" class="w-4 h-4 text-amber-500"></i>
+                </div>
+                <div class="font-mono text-2xl font-extrabold text-stone-950"><span id="equivDriving">0</span> <span class="text-xs font-sans text-stone-500 font-semibold">km</span></div>
+                <p class="text-[10px] text-stone-500 leading-tight">Equivalent driving distance in an average gasoline passenger car.</p>
+              </div>
+
+              <!-- Tech Phone core charges equivalent -->
+              <div class="p-4 bg-cyan-50/30 border border-cyan-100/40 rounded-xl space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold uppercase text-cyan-800 tracking-wider">Mobile Devices</span>
+                  <i data-lucide="smartphone" class="w-4 h-4 text-cyan-500"></i>
+                </div>
+                <div class="font-mono text-2xl font-extrabold text-stone-950"><span id="equivSmartphones">0</span></div>
+                <p class="text-[10px] text-stone-500 leading-tight">Full smart device recharges represented by monthly emissions volume.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Offsets Checklist Simulator Group -->
+          <div class="p-6 bg-white border border-stone-200/80 rounded-2xl shadow-sm">
+            <h3 class="font-bold text-stone-900 text-sm md:text-base flex items-center gap-2 mb-2">
+              <i data-lucide="sparkles" class="w-4.5 h-4.5 text-emerald-600"></i>
+              Toggle Offset Simulation Habits
+            </h3>
+            <p class="text-xs text-stone-400 mb-6 leading-relaxed">
+              Check actions to simulate potential emission shifts. These will instantly subtract directly from your gross monthly total, lowering your net carbon score!
+            </p>
+
+            <!-- Dynamic Offset saving header banner -->
+            <div id="offsetHeader">
+              <!-- Instantly updated dynamically via JS -->
+            </div>
+
+            <!-- Predefined checklist nodes -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="actionsContainer">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Dynamic smart Recommendations engine -->
+          <div class="p-6 bg-[#f7f6f2] border border-stone-200/80 rounded-2xl space-y-4">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-bold text-stone-900 text-sm md:text-base flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+                Personalized EcoAction Plans (EcoTrack AI)
+              </h3>
+              <span class="text-[9px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-serif">Smart Sorting</span>
+            </div>
+            
+            <div class="space-y-4" id="recContainer">
+              <!-- Recommendation items are sorted dynamically based on user's highest emission sources -->
+            </div>
+          </div>
+
+          <!-- Persistence Module: Save Current Entry into Local History -->
+          <div class="p-6 bg-white border border-stone-200/80 rounded-2xl shadow-sm space-y-6">
+            <h3 class="font-bold text-stone-900 text-sm md:text-base flex items-center gap-2">
+              <i data-lucide="bookmark" class="w-4.5 h-4.5 text-emerald-600"></i>
+              Persistent Historical Profiles
+            </h3>
+
+            <!-- Form: Create log entry -->
+            <form id="logForm" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 bg-stone-50 p-4 border border-stone-150 rounded-2xl">
+              <div class="flex-1 relative">
+                <input type="text" id="logName" required placeholder="e.g., Baseline Profile, After LED change, My Eco-Ideal" class="w-full text-sm font-medium border border-stone-200 focus:border-emerald-500 focus:ring-emerald-500 rounded-xl bg-white px-3.5 py-2.5 outline-none transition-colors" />
+              </div>
+              <button type="submit" class="bg-stone-900 hover:bg-emerald-700 hover:shadow-emerald-950/20 text-white font-bold text-xs uppercase tracking-wider py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer">
+                <i data-lucide="plus-circle" class="w-4.5 h-4.5"></i>
+                Save Current Run
+              </button>
+            </form>
+
+            <!-- Container of Past logs inside LocalStorage -->
+            <div class="space-y-3" id="historyContainer">
+              <!-- Log list injected dynamically via JS -->
+            </div>
+          </div>
+        </main>
+
+        <footer class="text-center py-12 text-xs text-stone-400 space-y-2 border-t border-stone-200/40 bg-stone-50/50 w-full mt-16 pb-16">
+          <p class="font-medium text-stone-500">&copy; 2026 EcoTrack AI Inc. Built with pure Vanilla HTML, Tailwind CSS & JavaScript.</p>
+          <p class="font-mono text-[10px]">Ready to upload to GitHub. Pure, fast, framework-free.</p>
+        </footer>
+
+    <!-- Load beautiful Lucide Vector Icons Library from CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Connect clean dashboard logic -->
+    <script src="script.js"></script>
+  </body>
+</html>

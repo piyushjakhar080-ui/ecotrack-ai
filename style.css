@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght=0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght=400;500;600&display=swap');
+
+:root {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Custom styles for an incredibly polished feel */
+body {
+  font-family: var(--font-sans);
+  background-color: #fcfbf9; /* Soft botanical warm-neutral background */
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #e2e0db;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+/* Dynamic SVG Donut Styling */
+.chart-donut-segment {
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom input sliders that look incredibly modern */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #e6e4de;
+  height: 6px;
+  border-radius: 9999px;
+  outline: none;
+  transition: background 0.3s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #059669; /* emerald-600 */
+  border-radius: 9999px;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  background: #047857; /* emerald-700 */
+}
+
+input[type="range"]:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+/* Glow effects */
+.green-glow {
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.15);
+}
+
+.yellow-glow {
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.15);
+}
+
+.red-glow {
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.15);
+}
+
+/* Action Checkbox effect */
+.action-card {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.action-card.checked {
+  border-color: #10b981;
+  background-color: #ecfdf5;
+}
