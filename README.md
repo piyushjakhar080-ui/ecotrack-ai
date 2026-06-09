@@ -32,6 +32,41 @@ This project displays standard engineering practices in vanilla DOM scripting an
 6. **Local Storage Database Persistence**:
    - Save calculation runs into a persistent local storage log stack. Load past structures instantly with one click, or clear previous logs easily.
 
+7. **Monthly Carbon Goal Tracker (New Feature!)**:
+   - Set a personalized monthly carbon emissions goal (ceiling) in kg CO₂ directly.
+   - Dynamic real-time calculation of your progress status, percentage, and interactive visual indicator.
+   - High-contrast, responsive color-coded progress bar (Green/Yellow/Red warning states) reflecting carbon performance levels.
+   - Persistent goal configuration stored locally in standard browser localStorage.
+
+---
+
+## 🎯 Monthly Carbon Goal Tracker: How It Works
+
+The Monthly Carbon Goal Tracker helps users visual and enforce a personal emissions ceiling. Here's how it operates under the hood:
+
+1. **User Goal Selection**:
+   - Enter a target value (default: `300` kg CO₂ / month) within the dedicated input.
+   - The platform saves the chosen goal inside `localStorage` under the `ecotrack_goal` key, keeping it persistent between restarts and device refreshes.
+
+2. **Goal Progress Percentage Formula**:
+   $$\text{Progress \%} = \left(\frac{\text{Current Net Monthly Footprint}}{\text{Goal}}\right) \times 100$$
+   - The value is dynamically evaluated to one decimal place on every slider input movement, diet button swap, and offset toggle check.
+
+3. **Intelligent Performance States & Progress Bar**:
+   - **Green Bar State ($\le 100\%$ of Goal)**: The footprint is securely below or equal to the ceiling budget limit. Prompts positive confirmation.
+   - **Amber Bar State ($> 100\%$ and $\le 120\%$ of Goal)**: The footprint is slightly within $20\%$ exceeding the budget. Prompts caution tips.
+   - **Red Bar State ($> 120\%$ of Goal)**: The footprint is significantly over the target. Prompts corrective alert instructions.
+
+---
+
+## 📸 Screenshots
+
+*Place your active screenshot links or files here to display application states!*
+
+| Green (Within Goal Target) | Yellow (Minor Warning State) | Red (Critical Exceeded State) |
+| :--- | :--- | :--- |
+| *[Insert Green Screenshot Placeholder]* | *[Insert Yellow Screenshot Placeholder]* | *[Insert Red Screenshot Placeholder]* |
+
 ---
 
 ## 📊 Scientific Calculations Model
@@ -102,3 +137,19 @@ The **EcoTrack AI** dashboard is designed to look like a high-end, premium, clou
 - **Plus Jakarta Sans Family**: Imported display typography providing highly polished visual hierarchy.
 
 *Developed with care as a premium, lightweight, fully-featured open-source carbon footprints awareness tool.*
+
+ 
+## Accessibility
+
+- Keyboard-friendly controls
+- Responsive design
+- Clear visual indicators
+- Accessible form labels
+
+## Testing
+
+See TESTING.md for detailed testing results.
+
+## Live Demo
+
+https://piyushjakhar080-ui.github.io/ecotrack-ai/
